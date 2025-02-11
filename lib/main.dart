@@ -36,51 +36,48 @@ class SquareAnimationState extends State<SquareAnimation> {
 
   @override
   Widget build(BuildContext context) {
+    var animationController = globalKey.currentState?.controller;
     return Column(
       children: [
-        Spacer(),
+        const Spacer(),
         SquareSlideTransition(
           key: globalKey,
           squareSize: _squareSize,
-          updateSquareAnimationState: () {
-            setState(() {});
-          },
+          updateSquareAnimationState: () => setState(() {}),
         ),
         const SizedBox(height: 16),
-        Spacer(),
+        const Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed:
-                  !((globalKey.currentState?.controller.isAnimating ?? false) ||
-                          !(globalKey.currentState?.controller.value != 1))
-                      ? () {
-                          setState(() {
-                            globalKey.currentState?.controller.animateTo(1);
-                          });
-                        }
+                  !((animationController?.isAnimating ?? false) ||
+                          !(animationController?.value != 1))
+                      ? () => moveSquare(1)
                       : null,
               child: const Text('Right'),
             ),
             const SizedBox(width: 8),
             ElevatedButton(
               onPressed:
-                  !((globalKey.currentState?.controller.isAnimating ?? false) ||
-                          !(globalKey.currentState?.controller.value != -1))
-                      ? () {
-                          setState(() {
-                            globalKey.currentState?.controller.animateTo(-1);
-                          });
-                        }
+                  !((animationController?.isAnimating ?? false) ||
+                          !(animationController?.value != -1))
+                      ? () => moveSquare(-1)
                       : null,
               child: const Text('Left'),
             ),
           ],
         ),
-        const SizedBox(height: 8),
       ],
     );
+  }
+
+  void moveSquare(double align) {
+    assert(align >= -1 && align <= 1);
+    setState(() {
+      globalKey.currentState?.controller.animateTo(align);
+    });
   }
 }
 
@@ -115,7 +112,6 @@ class SquareSlideTransition extends StatefulWidget {
 /// square based on the controller's value.
 class SquareSlideTransitionState extends State<SquareSlideTransition>
     with SingleTickerProviderStateMixin {
-
   /// The controller for the animation of square.
   late AnimationController controller;
 
