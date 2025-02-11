@@ -36,7 +36,10 @@ class SquareAnimationState extends State<SquareAnimation> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// Instance of [AnimationController]
     var animationController = globalKey.currentState?.controller;
+
     return Column(
       children: [
         const Spacer(),
@@ -73,6 +76,9 @@ class SquareAnimationState extends State<SquareAnimation> {
     );
   }
 
+  /// Moves the square to a specific alignment.
+  ///
+  /// Throws an [AssertionError] if [align] is outside the range [-1, 1].
   void moveSquare(double align) {
     assert(align >= -1 && align <= 1);
     setState(() {
